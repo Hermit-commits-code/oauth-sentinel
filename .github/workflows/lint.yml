@@ -1,0 +1,32 @@
+name: Lint and Security
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            - name: Install uv
+              uses: astral-sh/setup-uv@v5
+              with:
+                  enable-cache: true
+            - name: Run Ruff Check
+              run: uv run ruff check .
+            - name: Run Ruff Format
+              run: uv run ruff format --check .
+            - name: Dependency Audit
+              run: uv run pip-audit
+            - name: Semantic Security Scan
+              run: uv run semgrep scan --config auto
+    test:
+        runs-on: ubuntu-latest
+        needs: lint
+        steps:
+            - uses: actions/checkout@v4
+            - uses: astral-sh/setup-uv@v5
+            - name: Run Tests
+              run: uv run pytest
