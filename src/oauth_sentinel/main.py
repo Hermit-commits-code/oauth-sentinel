@@ -2,7 +2,7 @@
 # in from our "Canary" hit.
 # This is the Microsoft Authentication Library used to talk to the identity provider and
 # eventually pull the "emergency brake" on any compromised accounts.
-import msal
+import msal  # noqa: F401
 from fastapi import FastAPI, Request
 
 # Initializes the app, giving it a professional title which shows up correctly in auto-
